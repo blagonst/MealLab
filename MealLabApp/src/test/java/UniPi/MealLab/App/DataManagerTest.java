@@ -12,8 +12,8 @@ class DataManagerTest {
     @Test
     void testSaveAndLoad() {
         Recipe r = new Recipe();
-        r.idMeal = "999";
-        r.strMeal = "Test Burger";
+        r.setIdMeal("999");
+        r.setStrMeal("Test Burger");
         
         List<Recipe> favs = new ArrayList<>();
         favs.add(r);
@@ -27,7 +27,7 @@ class DataManagerTest {
         
         assertNotNull(loaded);
         assertEquals(1, loaded.favorites.size());
-        assertEquals("Test Burger", loaded.favorites.get(0).strMeal);
+        assertEquals("Test Burger", loaded.favorites.get(0).getStrMeal());
         
         new File("meallab_data.json").delete();
     }
