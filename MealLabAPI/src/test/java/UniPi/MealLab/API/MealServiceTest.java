@@ -16,7 +16,7 @@ public class MealServiceTest {
             assertNotNull(recipes, "List should not be null");
             assertFalse(recipes.isEmpty(), "List should not be empty");
             
-        } catch (Exception e) {
+        } catch (MealApiException e) {
             fail("Test failed: " + e.getMessage());
         }
     }
@@ -27,8 +27,36 @@ public class MealServiceTest {
             MealService service = new MealService();
             Recipe r = service.getRandomRecipe();
             assertNotNull(r, "Random recipe should not be null");
-        } catch (Exception e) {
+        } catch (MealApiException e) {
             fail("Random failed: " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void testFilterByIngredient() {
+        try {
+            MealService service = new MealService();
+            List<Recipe> recipes = service.getRecipesByIngredient("chicken_breast");
+            assertNotNull(recipes, "List should not be null");
+            assertFalse(recipes.isEmpty(), "List should not be empty");
+        } catch (MealApiException e) {
+            fail("Filter by ingredient failed: " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void testSearchWithSpecialCharacters() {
+        try {
+            MealService service = new MealService();
+            // Search for something with spaces and ampersand
+            List<Recipe> recipes = service.searchRecipes("Cream Cheese");
+            assertNotNull(recipes, "Should handle spaces correctly");
+            
+            // Just verifying it doesn't throw an exception for special chars
+            // "Sweet & Sour" is a common term
+            service.searchRecipes("Sweet & Sour");
+        } catch (MealApiException e) {
+            fail("Search with special characters failed: " + e.getMessage());
         }
     }
 }
