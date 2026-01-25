@@ -8,16 +8,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Handles local data persistence for the application.
- * Saves and loads user-specific data (Favorites and Cooked recipes) 
- * to a local JSON file using the Jackson library.
+ * Χειρίζεται την τοπική αποθήκευση δεδομένων για την εφαρμογή.
+ * Αποθηκεύει και φορτώνει δεδομένα συγκεκριμένα για τον χρήστη (Αγαπημένες και Μαγειρεμένες συνταγές) 
+ * σε ένα τοπικό αρχείο JSON χρησιμοποιώντας τη βιβλιοθήκη Jackson.
  */
 public class DataManager {
     private static final String DATA_FILE = "meallab_data.json";
     private final ObjectMapper mapper = new ObjectMapper();
 
     /**
-     * Container class for user data to be serialized to JSON.
+     * Κλάση container για τα δεδομένα του χρήστη προς σειριοποίηση σε JSON.
      */
     public static class UserData {
         public List<Recipe> favorites = new ArrayList<>();
@@ -25,16 +25,16 @@ public class DataManager {
     }
 
     /**
-     * Saves the current favorites and cooked lists to the local JSON file.
-     * @param favorites List of recipes marked as favorites
-     * @param cooked List of recipes marked as cooked
+     * Αποθηκεύει τις τρέχουσες λίστες αγαπημένων και μαγειρεμένων στο τοπικό αρχείο JSON.
+     * @param favorites Λίστα συνταγών που έχουν επισημανθεί ως αγαπημένες
+     * @param cooked Λίστα συνταγών που έχουν επισημανθεί ως μαγειρεμένες
      */
     public void save(List<Recipe> favorites, List<Recipe> cooked) {
         try {
             UserData data = new UserData();
             data.favorites = favorites;
             data.cooked = cooked;
-            // Serialize the UserData object to the file
+            // Σειριοποίηση του αντικειμένου UserData στο αρχείο
             mapper.writeValue(new File(DATA_FILE), data);
         } catch (IOException e) { 
             e.printStackTrace(); 
@@ -42,14 +42,14 @@ public class DataManager {
     }
 
     /**
-     * Loads user data from the local JSON file.
-     * @return UserData object containing loaded lists, or an empty one if file doesn't exist.
+     * Φορτώνει δεδομένα χρήστη από το τοπικό αρχείο JSON.
+     * @return Αντικείμενο UserData που περιέχει τις φορτωμένες λίστες, ή ένα κενό αν το αρχείο δεν υπάρχει.
      */
     public UserData load() {
         File file = new File(DATA_FILE);
         if (!file.exists()) return new UserData();
         try { 
-            // Deserialize JSON file back into Java objects
+            // Αποσειριοποίηση αρχείου JSON πίσω σε αντικείμενα Java
             return mapper.readValue(file, UserData.class); 
         }
         catch (IOException e) { 

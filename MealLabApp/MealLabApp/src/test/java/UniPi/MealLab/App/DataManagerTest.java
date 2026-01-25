@@ -34,7 +34,7 @@ class DataManagerTest {
 
     @Test
     void testLoadMissingFile() {
-        // Ensure file doesn't exist
+        // Διασφάλιση ότι το αρχείο δεν υπάρχει
         new File("meallab_data.json").delete();
         
         DataManager manager = new DataManager();
@@ -48,7 +48,7 @@ class DataManagerTest {
 
     @Test
     void testLoadCorruptedFile() throws java.io.IOException {
-        // Create a file with garbage content
+        // Δημιουργία αρχείου με garbage content
         File f = new File("meallab_data.json");
         try (java.io.FileWriter fw = new java.io.FileWriter(f)) {
             fw.write("THIS IS NOT JSON");

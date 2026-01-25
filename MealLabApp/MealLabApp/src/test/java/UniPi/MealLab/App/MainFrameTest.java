@@ -41,49 +41,49 @@ class MainFrameTest {
 
     @Test
     void testSearchSuccess() throws Exception {
-        // 1. Setup Mock Behavior
+        // 1. Ρύθμιση Συμπεριφοράς Mock
         Recipe r = new Recipe();
         r.setStrMeal("Mock Pizza");
         when(mockService.searchRecipes("Pizza")).thenReturn(List.of(r));
 
         SwingUtilities.invokeAndWait(() -> {
-            // 2. Inject Mock
+            // 2. Εισαγωγή Mock
             MainFrame frame = new MainFrame(mockService);
             
-            // 3. Act
+            // 3. Ενέργεια
             frame.performSearch("Pizza", true);
             
-            // 4. Verify Model Update (using reflection as before)
+            // 4. Επαλήθευση Ενημέρωσης Μοντέλου (χρησιμοποιώντας reflection όπως πριν)
             try {
                 Field fModelField = MainFrame.class.getDeclaredField("searchModel");
                 fModelField.setAccessible(true);
                 DefaultListModel<Recipe> model = (DefaultListModel<Recipe>) fModelField.get(frame);
 
-                // Note: In a real threaded env, we might need to wait, but since we 
-                // invokeAndWait inside the test for the trigger, and the worker executes...
-                // Actually SwingWorker is async. So checking immediately might fail if worker is slow.
-                // However, Mockito mocks are instant. We'll add a small sleep to be safe.
+                // Σημείωση: Σε πραγματικό περιβάλλον νημάτων, ίσως χρειαστεί να περιμένουμε, αλλά επειδή εμείς 
+                // invokeAndWait μέσα στον έλεγχο για το trigger, και ο worker εκτελεί...
+                // Στην πραγματικότητα ο SwingWorker είναι ασύγχρονος. Οπότε ο άμεσος έλεγχος μπορεί να αποτύχει αν ο worker είναι αργός.
+                // Ωστόσο, τα mocks του Mockito είναι άμεσα. Θα προσθέσουμε μια μικρή αναμονή για ασφάλεια.
             } catch (Exception e) { fail(e.getMessage()); }
             
             frame.dispose();
         });
         
-        // Wait for SwingWorker
+        // Αναμονή για SwingWorker
         Thread.sleep(200);
         
-        // 5. Verify Interaction
+        // 5. Επαλήθευση Αλληλεπίδρασης
         verify(mockService).searchRecipes("Pizza");
     }
 
     @Test
     void testSearchFailureHandling() throws Exception {
-        // 1. Setup Mock to Throw Exception (Simulate Network Error)
+        // 1. Ρύθμιση Mock για Ρίψη Εξαίρεσης (Προσομοίωση Σφάλματος Δικτύου)
         when(mockService.searchRecipes("Crash")).thenThrow(new MealApiException("Network Down"));
 
         SwingUtilities.invokeAndWait(() -> {
             MainFrame frame = new MainFrame(mockService);
             
-            // 2. Act - Should show error dialog, not crash app
+            // 2. Ενέργεια - Θα πρέπει να εμφανιστεί διάλογος σφάλματος, όχι κατάρρευση εφαρμογής
             frame.performSearch("Crash", true);
             
             frame.dispose();
@@ -91,7 +91,7 @@ class MainFrameTest {
         
         Thread.sleep(200);
         
-        // Verify service was called even though it failed
+        // Επαλήθευση ότι η υπηρεσία κλήθηκε παρόλο που απέτυχε
         verify(mockService).searchRecipes("Crash");
     }
 
@@ -111,18 +111,18 @@ class MainFrameTest {
 
     @Test
     void testSearchByIngredient() throws Exception {
-        // Setup
+        // Ρύθμιση
         when(mockService.getRecipesByIngredient("Chicken")).thenReturn(new ArrayList<>());
 
         SwingUtilities.invokeAndWait(() -> {
             MainFrame frame = new MainFrame(mockService);
-            // Act: Search by Ingredient (false)
+            // Ενέργεια: Αναζήτηση με Συστατικό (false)
             frame.performSearch("Chicken", false);
             frame.dispose();
         });
         
         Thread.sleep(200);
-        // Verify correct service method called
+        // Επαλήθευση ότι κλήθηκε η σωστή μέθοδος υπηρεσίας
         verify(mockService).getRecipesByIngredient("Chicken");
     }
 
@@ -136,7 +136,7 @@ class MainFrameTest {
             MainFrame frame = new MainFrame(mockService);
             frame.performRandomSearch();
             
-            // Check model update
+            // Έλεγχος ενημέρωσης μοντέλου
             DefaultListModel<Recipe> model = frame.getSearchModel();
             assertNotNull(model);
             
@@ -157,12 +157,12 @@ class MainFrameTest {
             r.setIdMeal("101");
             r.setStrMeal("Test Recipe");
             
-            // 1. Add Unique
+            // 1. Προσθήκη Μοναδικού
             boolean added = frame.addUnique(favs, r);
             assertTrue(added, "Should add new recipe");
             assertEquals(1, favs.size());
             
-            // 2. Add Duplicate
+            // 2. Προσθήκη Διπλότυπου
             boolean addedAgain = frame.addUnique(favs, r);
             assertFalse(addedAgain, "Should not add duplicate");
             assertEquals(1, favs.size());

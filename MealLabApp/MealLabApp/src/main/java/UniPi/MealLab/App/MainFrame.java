@@ -14,9 +14,9 @@ import UniPi.MealLab.API.MealService;
 import UniPi.MealLab.Model.Recipe;
 
 /**
- * Main application window for the Meal Lab project.
- * Handles the graphical user interface, event management, and asynchronous
- * communication with the MealService.
+ * Κύριο παράθυρο εφαρμογής για το έργο Meal Lab.
+ * Χειρίζεται το graphic user interface, τη διαχείριση συμβάντων και την ασύγχρονη
+ * επικοινωνία με το MealService.
  */
 public class MainFrame extends JFrame {
 
@@ -28,7 +28,7 @@ public class MainFrame extends JFrame {
     private DefaultListModel<Recipe> cookedModel = new DefaultListModel<>();
     private java.util.Map<String, ImageIcon> imageCache = new java.util.HashMap<>();
     
-    // UI Components promoted for access/testing
+    // UI Components προωθούνται για πρόσβαση/έλεγχο
     private JProgressBar progressBar;
     private JButton searchBtn;
     private JTextField searchField;
@@ -53,7 +53,7 @@ public class MainFrame extends JFrame {
         content.setBackground(BG_MAIN);
         setContentPane(content);
 
-        // Header section with logo/title
+        // Τμήμα κεφαλίδας με λογότυπο/τίτλο
         JPanel header = new JPanel(new BorderLayout());
         header.setBackground(Color.WHITE);
         header.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(226, 232, 240)));
@@ -64,7 +64,7 @@ public class MainFrame extends JFrame {
         header.add(title, BorderLayout.WEST);
         content.add(header, BorderLayout.NORTH);
 
-        // Main navigation tabs: Search, Favorites, and Cooked lists
+        // Κύριες καρτέλες πλοήγησης: Αναζήτηση, Αγαπημένα και Λίστες μαγειρεμένων
         JTabbedPane tabs = new JTabbedPane();
         tabs.setFont(FONT_BOLD);
         tabs.setBorder(new EmptyBorder(10, 10, 0, 10));
@@ -75,12 +75,12 @@ public class MainFrame extends JFrame {
     }
     
     /**
-     * Public method to trigger search programmatically (for testing).
+     * public μέθοδος για την εκκίνηση αναζήτησης προγραμματιστικά (για έλεγχο).
      */
     public void performSearch(String query, boolean byName) {
         if (query == null || query.trim().isEmpty()) return;
         
-        // Update UI if fields are initialized (might be null in strict unit tests)
+        // Ενημέρωση UI εάν τα πεδία έχουν αρχικοποιηθεί (μπορεί να είναι null σε Strict unit tests)
         if(searchField != null) searchField.setText(query);
         if(searchTypeCombo != null) searchTypeCombo.setSelectedItem(byName ? "Name" : "Ingredient");
 
@@ -92,7 +92,7 @@ public class MainFrame extends JFrame {
     }
     
     /**
-     * Public method to trigger random search (for testing).
+     * public μέθοδος για την εκκίνηση τυχαίας αναζήτησης (για έλεγχο).
      */
     public void performRandomSearch() {
         runWorker(() -> { 
@@ -101,15 +101,15 @@ public class MainFrame extends JFrame {
         }, searchModel, searchBtn, progressBar);
     }
     
-    // Getters for testing
+    // Getters για έλεγχο
     DefaultListModel<Recipe> getSearchModel() { return searchModel; }
     DefaultListModel<Recipe> getFavoritesModel() { return favoritesModel; }
     DefaultListModel<Recipe> getCookedModel() { return cookedModel; }
 
     /**
-     * Creates a split view containing a list on the left and detail panel on the right.
-     * @param model The data model for the list
-     * @param isSearchTab Whether to include the search input controls
+     * Δημιουργεί μια split view που περιέχει μια λίστα στα αριστερά και πάνελ λεπτομερειών στα δεξιά.
+     * @param model Το μοντέλο δεδομένων για τη λίστα
+     * @param isSearchTab Εάν θα συμπεριληφθούν τα στοιχεία ελέγχου εισαγωγής αναζήτησης
      */
     private JPanel createSplitView(DefaultListModel<Recipe> model, boolean isSearchTab) {
         JPanel left = new JPanel(new BorderLayout());
@@ -121,7 +121,7 @@ public class MainFrame extends JFrame {
         top.setBorder(new EmptyBorder(20, 0, 20, 0));
         
         if (isSearchTab) {
-            // Search UI controls using GridBagLayout for alignment
+            // Στοιχεία ελέγχου UI αναζήτησης χρησιμοποιώντας GridBagLayout για στοίχιση
             JPanel centerPanel = new JPanel(new GridBagLayout());
             centerPanel.setOpaque(false);
             
@@ -203,12 +203,12 @@ public class MainFrame extends JFrame {
         placeholder.setForeground(Color.GRAY);
         right.add(placeholder, BorderLayout.CENTER);
 
-        // Update details when a user clicks a recipe in the list
+        // Ενημέρωση λεπτομερειών όταν ένας χρήστης κάνει κλικ σε μια συνταγή στη λίστα
         list.addListSelectionListener(e -> { 
             if (!e.getValueIsAdjusting()) { 
                 Recipe r = list.getSelectedValue(); 
                 if (r != null) {
-                    // Check if we need to fetch full details (e.g., if instructions are missing)
+                    // Έλεγχος αν χρειάζεται να ληφθούν πλήρεις λεπτομέρειες (π.χ., εάν λείπουν οδηγίες)
                     if (r.getStrInstructions() == null || r.getStrInstructions().isEmpty()) {
                         new SwingWorker<Recipe, Void>() {
                             @Override
@@ -220,7 +220,7 @@ public class MainFrame extends JFrame {
                                 try {
                                     Recipe full = get();
                                     if (full != null) {
-                                        // Update the model object if possible or just use the full one
+                                        // Ενημέρωση του αντικειμένου μοντέλου εάν είναι δυνατόν ή απλά χρήση του πλήρους
                                         updateDetailPanel(full, right, model);
                                     }
                                 } catch (Exception ex) {
@@ -245,15 +245,15 @@ public class MainFrame extends JFrame {
     }
 
     /**
-     * Renders full recipe details including high-quality image, ingredients, and instructions.
-     * Uses HTML rendering for the content and a background worker for the image.
+     * Αποδίδει πλήρεις λεπτομέρειες συνταγής συμπεριλαμβανομένης εικόνας υψηλής ποιότητας, συστατικών και οδηγιών.
+     * Χρησιμοποιεί απόδοση HTML για το περιεχόμενο και έναν background worker για την εικόνα.
      */
     private void updateDetailPanel(Recipe r, JPanel panel, DefaultListModel<Recipe> activeModel) {
         panel.removeAll(); panel.setLayout(new BorderLayout());
         JLabel imgL = new JLabel("Loading image...", SwingConstants.CENTER);
         imgL.setPreferredSize(new Dimension(0, 350)); imgL.setOpaque(true); imgL.setBackground(new Color(241, 245, 249));
         
-        // Asynchronous image loading and scaling to keep UI responsive
+        // Ασύγχρονη φόρτωση και κλιμάκωση εικόνας για να διατηρηθεί το UI
         String thumbUrl = r.getStrMealThumb();
         if (thumbUrl != null && imageCache.containsKey(thumbUrl)) {
             imgL.setText("");
@@ -299,7 +299,7 @@ public class MainFrame extends JFrame {
         String area = r.getStrArea() != null ? r.getStrArea() : "Unknown Area";
         String instructions = r.getStrInstructions() != null ? r.getStrInstructions() : "No instructions available.";
 
-        // Generate HTML content for the recipe details
+        // Δημιουργία περιεχομένου HTML για τις λεπτομέρειες της συνταγής
         String h = "<html><body style='font-family: Segoe UI; color: #334155; margin:0; padding:0;'>" +
                    "<h2 style='color: #1e293b; margin-bottom:2px; margin-top:0; font-size: 18px;'>" + r.getStrMeal() + "</h2>" +
                    "<p style='color: #64748b; font-size:11px; margin-top:0; margin-bottom: 8px;'>" + category + " &bull; " + area + "</p>" +
@@ -320,7 +320,7 @@ public class MainFrame extends JFrame {
         text.setText(h); text.setCaretPosition(0);
         panel.add(new JScrollPane(text), BorderLayout.CENTER);
 
-        // Action buttons: Favorite, Cooked, and Delete
+        // Κουμπιά ενεργειών: Αγαπημένο, Μαγειρεμένο και Διαγραφή
         JPanel btns = new JPanel(new FlowLayout(FlowLayout.RIGHT, 15, 15)); btns.setBackground(Color.WHITE);
         btns.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(226, 232, 240)));
         JButton fav = new ModernButton("Favorite", new Color(236, 72, 153), Color.WHITE);
@@ -362,8 +362,8 @@ public class MainFrame extends JFrame {
     }
     
     /**
-     * Executes a network-related task on a separate thread using SwingWorker.
-     * Prevents the UI from freezing during API calls.
+     * Εκτελεί ενα network related task σε ξεχωριστό thread χρησιμοποιώντας SwingWorker.
+     * Αποτρέπει το πάγωμα του UI κατά τη διάρκεια κλήσεων API.
      */
     private void runWorker(TaskSupplier t, DefaultListModel<Recipe> m, JButton b, JProgressBar bar) {
         new SwingWorker<List<Recipe>, Void>() {

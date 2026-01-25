@@ -12,8 +12,8 @@ import java.nio.charset.StandardCharsets;
 import java.net.URLEncoder;
 
 /**
- * Service class responsible for communicating with the external MealDB API.
- * Handles HTTP requests and JSON parsing.
+ * Κλάση υπηρεσίας υπεύθυνη για την επικοινωνία με το εξωτερικό MealDB API.
+ * Χειρίζεται αιτήματα HTTP και ανάλυση JSON.
  */
 public class MealService implements IMealService {
     
@@ -27,10 +27,10 @@ public class MealService implements IMealService {
     }
 
     /**
-     * Helper method to execute a GET request to the API.
-     * @param suffix The endpoint suffix (e.g., "search.php?s=pasta")
-     * @return List of Recipe objects
-     * @throws MealApiException if network error or parsing fails
+     * Βοηθητική μέθοδος για την εκτέλεση αιτήματος GET στο API.
+     * @param suffix Η κατάληξη του τελικού σημείου (π.χ., "search.php?s=chicken")
+     * @return Λίστα αντικειμένων Recipe
+     * @throws MealApiException αν αποτύχει το δίκτυο ή η ανάλυση
      */
     private List<Recipe> makeRequest(String suffix) throws MealApiException {
         int maxRetries = 2;
@@ -61,7 +61,7 @@ public class MealService implements IMealService {
                 if (e instanceof com.fasterxml.jackson.core.JsonProcessingException) {
                     throw new MealApiException("Invalid API Response Format", e);
                 }
-                // Retry on network/IO errors (IOException, InterruptedException)
+                //Retry on network/IO errors (IOException, InterruptedException)
                 lastException = e;
                 attempt++;
                 if (attempt < maxRetries) {
@@ -78,9 +78,9 @@ public class MealService implements IMealService {
     }
 
     /**
-     * Searches for recipes by ingredient or name.
-     * @param query The search term (e.g., "chicken")
-     * @return List of matching recipes
+     * Αναζητά συνταγές ανά συστατικό ή όνομα.
+     * @param query Ο όρος αναζήτησης (π.χ. "chicken")
+     * @return Λίστα συνταγών που ταιριάζουν
      */
     public List<Recipe> searchRecipes(String query) throws MealApiException {
         String encodedQuery = URLEncoder.encode(query, StandardCharsets.UTF_8);
@@ -88,9 +88,9 @@ public class MealService implements IMealService {
     }
 
     /**
-     * Filters recipes by main ingredient.
-     * @param ingredient The ingredient to filter by (e.g., "chicken_breast")
-     * @return List of matching recipes
+     * Φιλτράρει συνταγές ανά κύριο συστατικό.
+     * @param ingredient Το συστατικό για φιλτράρισμα (π.χ. "chicken_breast")
+     * @return Λίστα συνταγών που ταιριάζουν
      */
     public List<Recipe> getRecipesByIngredient(String ingredient) throws MealApiException {
         String encodedIngredient = URLEncoder.encode(ingredient, StandardCharsets.UTF_8);
@@ -98,9 +98,9 @@ public class MealService implements IMealService {
     }
     
     /**
-     * Retrieves full details for a specific recipe by ID.
-     * @param id The recipe ID
-     * @return The Recipe object or null if not found
+     * Ανακτά πλήρεις λεπτομέρειες για μια συγκεκριμένη συνταγή μέσω ID.
+     * @param id Το ID της συνταγής
+     * @return Το αντικείμενο Recipe ή null αν δεν βρεθεί
      */
     public Recipe getRecipeById(String id) throws MealApiException {
         List<Recipe> recipes = makeRequest("lookup.php?i=" + id);
@@ -111,8 +111,8 @@ public class MealService implements IMealService {
     }
 
     /**
-     * Fetches a completely random recipe.
-     * @return A random Recipe object
+     * Ανακτά μια εντελώς τυχαία συνταγή.
+     * @return Ένα τυχαίο αντικείμενο Recipe
      */
     public Recipe getRandomRecipe() throws MealApiException {
         List<Recipe> recipes = makeRequest("random.php");

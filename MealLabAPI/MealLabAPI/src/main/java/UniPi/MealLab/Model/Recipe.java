@@ -21,7 +21,7 @@ public class Recipe {
                   strMeasure11, strMeasure12, strMeasure13, strMeasure14, strMeasure15,
                   strMeasure16, strMeasure17, strMeasure18, strMeasure19, strMeasure20;
 
-    // Getters and Setters
+    // Getters και Setters
     public String getIdMeal() { return idMeal; }
     public void setIdMeal(String idMeal) { this.idMeal = idMeal; }
 
@@ -40,7 +40,7 @@ public class Recipe {
     public String getStrMealThumb() { return strMealThumb; }
     public void setStrMealThumb(String strMealThumb) { this.strMealThumb = strMealThumb; }
 
-    // Ingredient Getters/Setters
+    // Getters/Setters Συστατικών
     public String getStrIngredient1() { return strIngredient1; }
     public void setStrIngredient1(String strIngredient1) { this.strIngredient1 = strIngredient1; }
     public String getStrIngredient2() { return strIngredient2; }
@@ -82,7 +82,7 @@ public class Recipe {
     public String getStrIngredient20() { return strIngredient20; }
     public void setStrIngredient20(String strIngredient20) { this.strIngredient20 = strIngredient20; }
 
-    // Measure Getters/Setters
+    // Getters/Setters Μετρήσεων
     public String getStrMeasure1() { return strMeasure1; }
     public void setStrMeasure1(String strMeasure1) { this.strMeasure1 = strMeasure1; }
     public String getStrMeasure2() { return strMeasure2; }
@@ -188,7 +188,7 @@ public class Recipe {
                 case 8: recipe.setStrIngredient8(ingredient); recipe.setStrMeasure8(measure); break;
                 case 9: recipe.setStrIngredient9(ingredient); recipe.setStrMeasure9(measure); break;
                 case 10: recipe.setStrIngredient10(ingredient); recipe.setStrMeasure10(measure); break;
-                // Simplified for brevity, covering top 10 is usually enough for tests
+                // Απλοποιημένο για συντομία, με κάλυψη των 10 κορυφαίων
             }
             return this;
         }

@@ -13,10 +13,10 @@ class RecipeTest {
         r.setStrMeasure1("1kg");
         r.setStrIngredient2("Salt");
         r.setStrMeasure2("1 tsp");
-        r.setStrIngredient3(""); // Empty
+        r.setStrIngredient3(""); // empty
         r.setStrMeasure3("");
         r.setStrIngredient4(null); // Null
-        r.setStrMeasure4("1 cup"); // Measure without ingredient should be ignored
+        r.setStrMeasure4("1 cup"); // Η μέτρηση χωρίς συστατικό θα πρέπει να αγνοηθεί
 
         List<String> ingredients = r.getIngredientsList();
         
@@ -29,12 +29,12 @@ class RecipeTest {
     void testGetIngredientsList_NoMeasures() {
         Recipe r = new Recipe();
         r.setStrIngredient1("Water");
-        // Measure 1 is null/empty by default
+        // Η μέτρηση 1 είναι null/empty από προεπιλογή
 
         List<String> ingredients = r.getIngredientsList();
         
         assertEquals(1, ingredients.size());
-        assertTrue(ingredients.contains("Water")); // Should not have trailing colon
+        assertTrue(ingredients.contains("Water")); // Δεν πρέπει να έχει άνω και κάτω τελεία στο τέλος
     }
 
     @Test

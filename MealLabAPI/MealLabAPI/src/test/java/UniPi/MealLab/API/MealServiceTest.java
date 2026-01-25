@@ -48,12 +48,12 @@ public class MealServiceTest {
     public void testSearchWithSpecialCharacters() {
         try {
             MealService service = new MealService();
-            // Search for something with spaces and ampersand
+            // Αναζήτηση για κάτι με κενά και εμπορικό και (&)
             List<Recipe> recipes = service.searchRecipes("Cream Cheese");
             assertNotNull(recipes, "Should handle spaces correctly");
             
-            // Just verifying it doesn't throw an exception for special chars
-            // "Sweet & Sour" is a common term
+            // Απλά επαληθεύουμε ότι δεν πετάει εξαίρεση για ειδικούς χαρακτήρες
+            // Το "Sweet & Sour" είναι ένας κοινός όρος
             service.searchRecipes("Sweet & Sour");
         } catch (MealApiException e) {
             fail("Search with special characters failed: " + e.getMessage());
@@ -64,7 +64,7 @@ public class MealServiceTest {
     public void testGetRecipeById() {
         try {
             MealService service = new MealService();
-            // 52772 is "Teriyaki Chicken Casserole" - a known ID in TheMealDB
+            // Το 52772 είναι "Teriyaki Chicken Casserole" - ένα γνωστό ID στο TheMealDB
             Recipe r = service.getRecipeById("52772");
             assertNotNull(r, "Should return a recipe for valid ID");
             assertEquals("52772", r.getIdMeal(), "ID should match");
